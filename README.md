@@ -22,4 +22,4 @@ scrapy crawl {script.name} -o '%(time)s_scraperesults.csv' --nolog
 
 Ref:  
 * https://stackoverflow.com/questions/43914442/how-to-create-file-name-of-feed-export-dynamically-using-scrapy-command  
-
+* https://docs.scrapy.org/en/latest/topics/feed-exports.html  
