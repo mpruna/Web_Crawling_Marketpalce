@@ -11,3 +11,15 @@ Within this project I define 4 scripts:
 * a script that gets the detailed description of the add  
 * a short description  
 * email notification script  
+
+### Usage examples
+
+For better readibility export the results of the crawl with datetime format.  
+
+```
+scrapy crawl {script.name} -o '%(time)s_scraperesults.csv' --nolog  
+```
+
+Ref:  
+* https://stackoverflow.com/questions/43914442/how-to-create-file-name-of-feed-export-dynamically-using-scrapy-command  
+
