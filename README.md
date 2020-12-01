@@ -1,3 +1,16 @@
+### Project Structure  
+
+```
+├── car-list.json
+├── create_url.py
+├── detailed_crawl.py
+├── environment.yml
+├── README.md
+├── requirements.txt
+└── short_crawl.py
+```
+
+
 In general, web-crawling has some real-world applicability.  
 I can search and create specific datasets when there is nothing public.  
 Or as a byproduct, I can help with data wrangling. Data on the web comes in different formats, and often something must be changed.   
