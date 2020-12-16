@@ -33,6 +33,13 @@ For better readibility export the results of the crawl with datetime format.
 scrapy crawl {script.name} -o '%(time)s_scraperesults.csv' --nolog  
 ```
 
+### Release 2
+
+In release 2, I created a URL exporter. In the previous release, I used hardcoded URLs in the python script.  
+The idea is to export the search URL and make it part of the environment variable.  
+The URL is created based on specific search options.  
+
+
 Ref:  
 * https://stackoverflow.com/questions/43914442/how-to-create-file-name-of-feed-export-dynamically-using-scrapy-command  
 * https://docs.scrapy.org/en/latest/topics/feed-exports.html  

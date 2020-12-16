@@ -1,60 +1,82 @@
-import argparse
+import fire
+from urllib.parse import urljoin
+import posixpath
 import pandas as pd
+from datetime import datetime
+import os
+
+os.chdir("/home/Bitbucket/web_scraping/auto_scrapers/olx_scrapers/olx_scrapers/spiders")
+
+def validate_options(item_check, item1, item2):
+    check: bool = True
+
+    if item_check == "brand_model":
+        data = pd.read_json('car-list.json')
+        brand_list = data['brand'].tolist()
+        models = data[data['brand'] == item1]['models'].tolist()[0]
+
+        check: bool = [(item1 in brand_list) & (item2 in models)]
+
+    if item_check == "date_check":
+        date = datetime.now().year
+        if item1 and item2 != None:
+            check: bool = [(item1 >= 1960) & (item1 <= item2) & (item2 <= date)]
+        else item1 != None:
+            check: bool =
+
+    if item_check == "price_check":
+        check: bool = [(item1 <= item2)]
+
+    if item_check == "fuel_check":
+        check: bool = [item1 in ['Benzina', 'Diesel', 'Gpl', 'Hybrid', 'Electric']]
+
+    return check
+
+    print("End check, check status: ", check)
+    return check
 
 
-def search_options():
-    data = pd.read_json('car-list.json')
-    brands = data['brand'].tolist()
+def createurl(brand: str, model: str, y_start: int="", y_stop: int ="", start_p: int =1000, stop_p: int=1000000, fuel=""):
+    """
+    Returns the search parameters from
+    base OLX URL: "https://www.olx.ro/auto-masini-moto-ambarcatiuni"
+    :param brand: car brand [Volvo, BMW, Audi] etc
+    :param model: car model [XC60, X3, A4] etc
+    :param y_start: Year when car was built, starting the search from year ...
+    :param y_stop: Year when car was built, up to year ...
+    :param start_p: Starting price for the car
+    :param stop_p: Stopping price for the car
+    :param fuel: ['Benzina', 'Diesel, 'Gpl', 'Hybrid', 'Electric']
+    """
 
-    # Create the parser and add arguments
-    parser = argparse.ArgumentParser()
-    # subparsers = parser.add_subparsers(help='commands')
+    base_url = "https://www.olx.ro/auto-masini-moto-ambarcatiuni/autoturisme/"
+    opt_path = posixpath.join(brand, model)
+    return_url= urljoin(base_url, opt_path)
 
-    # parser.add_argument('-t', help="Car brand: ", choices=['BMW', 'Mercedes-Benz', 'Nissan'])
-    # create_parser = subparsers.add_parser('create', help='Create a directory')
-    parser.add_argument('-b', help="Car brand: ", choices=brands)
-    parser.add_argument('-m', help="Brand model", choices=['Passat', 'Vectra', 'X3',''])
-    parser.add_argument('-f', help="Fuel type: ", choices=['Toate', 'Benzina', 'Diesel', 'GPL', 'Hybrid', 'Electic'])
-    parser.add_argument('-g', help="Gearbox: ", choices=['manuala', 'automata'])
-
+    opt = [brand, model, y_start, y_stop, start_p, stop_p, fuel]
+    checks = ["brand_model", "date_check", "price_check", "fuel_check"]
+    check_status = True
     '''
-    By default argparse create all the arguments at once.
-    So I must find ways to sort this out
-    
-    https://docs.python.org/3.4//library/argparse.html
-    https://stackoverflow.com/questions/54383659/python-argparse-value-after-positional-argument
-    https://pymotw.com/2/argparse/
-    
-    args = parser.parse_args()
-    b = args.b
-    models = data[data['brand'] == b]['models'].tolist()[0]
-    print(models)
-    parser.add_argument('-m', help="Brand model: ", choices=models)
+    while check_status:
+        pass
     '''
+    if check_status == True:
+        opt_path=["?search%5Bfilter_float_price%3Afrom%5D=", "search%5Bfilter_float_price%3Ato%5D=", \
+                  "?search%5Bfilter_float_year%3Afrom%5D=", "search%5Bfilter_float_year%3Ato%5D="]
+        opt=[start_p,stop_p]
+        return_url = posixpath.join(return_url, opt_path[0], str(opt[0]))
+        return_url = posixpath.join(return_url, opt_path[1], str(opt[1]))
 
-    args = parser.parse_args()
-    b, f, g = args.b, args.f, args.g
-    models = data[data['brand'] == b]['models'].tolist()[0]
+    return return_url
 
-    for opt, val in zip(["-b", "-f", "-g"], [b, f, g]):
-        print(opt, val)
+def export_url(url):
 
-    print("Choose one of these models: {} {} {}".format("\n", models, "\n"))
-    m = input("Model: ")
-    if m not in models:
-        m = ""
-        print("Incorrect model option")
+    cmd="conda env config vars set url="+str(url)
+    export_status=os.popen(cmd).read()
+    print(export_status)
 
-    query = ""
+if __name__ == '__main__':
+  url=fire.Fire(createurl)
+  export_url(url)
+  print(url)
 
-    for item in [b, m, f, g]:
-        if item is not None:
-            query += item + " "
-
-    return query
-
-
-if __name__ == "__main__":
-
-    q = search_options()
-    print(q)
