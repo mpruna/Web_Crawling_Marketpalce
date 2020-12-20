@@ -39,6 +39,11 @@ In release 2, I created a URL exporter. In the previous release, I used hardcode
 The idea is to export the search URL and make it part of the environment variable.  
 The URL is created based on specific search options.  
 
+Added json cleaning jupyter-nb.   
+Olx search is case sensitive and I had to convert brand and model strings to lower case caracters.  
+I also have to replace non-english with english characters.  
+
+
 
 Ref:  
 * https://stackoverflow.com/questions/43914442/how-to-create-file-name-of-feed-export-dynamically-using-scrapy-command  
